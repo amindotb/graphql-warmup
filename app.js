@@ -75,7 +75,15 @@ const RootQueryType = new GraphQLObjectType({
             type: new GraphQLList(MovieType),
             description: 'List of All Movie',
             resolve: () => movies
-        }
+        },
+        movie: {
+            type: MovieType,
+            description: 'A Single Movie',
+            args: {
+                id: { type: GraphQLInt }
+            },
+            resolve: (parent, args) => movies.find(movie => movie.id === args.id)
+        },
         
         // End of objects
     })
