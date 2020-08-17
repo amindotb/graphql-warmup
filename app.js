@@ -65,6 +65,15 @@ const MovieType = new GraphQLObjectType({
     })
 });
 
+const ProducerType = new GraphQLObjectType({
+    name:"ProducerType",
+    description:"Represents a Producer.",
+    fields: ()=>({
+        id: {type:GraphQLNonNull(GraphQLInt)},
+        name: {type:GraphQLNonNull(GraphQLString)},         
+    })
+});
+
 const RootQueryType = new GraphQLObjectType({
     name: 'Query',
     description: 'Root Query',
@@ -83,6 +92,19 @@ const RootQueryType = new GraphQLObjectType({
                 id: { type: GraphQLInt }
             },
             resolve: (parent, args) => movies.find(movie => movie.id === args.id)
+        },
+        producers: {
+            type: new GraphQLList(ProducerType),
+            description: 'List of All Producers',
+            resolve: () => producers
+        },
+        producer: {
+            type: ProducerType,
+            description: 'A Single Producers',
+            args: {
+                id: { type: GraphQLInt }
+            },
+            resolve: (parent, args) => producers.find(producer => producer.id === args.id)
         },
         
         // End of objects
