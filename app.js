@@ -54,5 +54,40 @@ const producers = [
     },
 ];
 
+const MovieType = new GraphQLObjectType({
+    name:"Movie",
+    description:"Represents a movie.",
+    fields: ()=>({
+        id: {type:GraphQLNonNull(GraphQLInt)},
+        name: {type:GraphQLNonNull(GraphQLString)},
+        story: {type:GraphQLNonNull(GraphQLString)},
+        producerId: { type: GraphQLNonNull(GraphQLInt) }             
+    })
+});
+
+const RootQueryType = new GraphQLObjectType({
+    name: 'Query',
+    description: 'Root Query',
+    fields: () => ({
+        // Objects
+
+        movies: {
+            type: new GraphQLList(MovieType),
+            description: 'List of All Movie',
+            resolve: () => movies
+        }
+        
+        // End of objects
+    })
+});
+
+const schema = new GraphQLSchema({
+    query: RootQueryType,
+});  
+
+app.use('/graphql', graphqlHTTP({
+    schema: schema,
+    graphiql: true
+}));
 
 app.listen(5000, () => console.log('Server Running'))
