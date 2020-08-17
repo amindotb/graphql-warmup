@@ -61,7 +61,13 @@ const MovieType = new GraphQLObjectType({
         id: {type:GraphQLNonNull(GraphQLInt)},
         name: {type:GraphQLNonNull(GraphQLString)},
         story: {type:GraphQLNonNull(GraphQLString)},
-        producerId: { type: GraphQLNonNull(GraphQLInt) }             
+        producerId: { type: GraphQLNonNull(GraphQLInt) },
+        producer: {
+            type: ProducerType,
+            resolve: (movie) => {
+                return producers.find(producer => producer.id === movie.producerId);
+            }
+        }             
     })
 });
 
@@ -70,7 +76,13 @@ const ProducerType = new GraphQLObjectType({
     description:"Represents a Producer.",
     fields: ()=>({
         id: {type:GraphQLNonNull(GraphQLInt)},
-        name: {type:GraphQLNonNull(GraphQLString)},         
+        name: {type:GraphQLNonNull(GraphQLString)},
+        movies: {
+            type: new GraphQLList(MovieType),
+            resolve: (producer) =>{
+                return movies.filter(movie => movie.producerId === producer.id);
+            }
+        }         
     })
 });
 
